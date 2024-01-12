@@ -1,0 +1,36 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 60px 0;
+}
+
+h2 {
+  font-size: 100px;
+}
+
+.not-found {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.not-found h1,
+h2,
+p {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.not-found a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 18px;
+}
