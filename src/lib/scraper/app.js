@@ -15,8 +15,6 @@ async function main(urlsImput, cookiesImput, fileOutput) {
   const urlStrings = await fs.readFile(`./data/scraper/urls/${urlsImput}.json`);
   urlJSON = JSON.parse(urlStrings);
 
-  // const browser = await puppeteer.launch({ headless: "new" });
-  // const page = await browser.newPage();
   const browser = await puppeteer.launch({
     headless: "new",
     userDataDir:

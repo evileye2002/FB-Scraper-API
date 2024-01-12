@@ -2,7 +2,7 @@ const { default: puppeteer } = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const rua = require("random-useragent");
 const fs = require("fs").promises;
-const { sleep } = require("./helper");
+const { sleep } = require("../helper");
 
 puppeteer.use(StealthPlugin());
 

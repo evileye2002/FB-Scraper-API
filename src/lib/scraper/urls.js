@@ -1,6 +1,6 @@
 const { default: puppeteer } = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
-const { sleep, removeDuplicate } = require("./helper");
+const { sleep, removeDuplicate } = require("../helper");
 const fs = require("fs").promises;
 puppeteer.use(StealthPlugin());
 
@@ -8,7 +8,7 @@ let urlJSON = [];
 let cookies = null;
 
 async function main(n) {
-  // const urlStrings = await fs.readFile("./data/urls/urls2.json");
+  // const urlStrings = await fs.readFile("./data/scraper/urls/urls2.json");
   // urlJSON = JSON.parse(urlStrings);
 
   // let url = "";
@@ -21,7 +21,9 @@ async function main(n) {
   const page = await browser.newPage();
 
   if (cookies === null) {
-    const cookiesString = await fs.readFile("./data/cookies/cookies3.json");
+    const cookiesString = await fs.readFile(
+      "./data/scraper/cookies/cookies3.json"
+    );
     cookies = JSON.parse(cookiesString);
   }
   await page.setCookie(...cookies);
@@ -53,7 +55,7 @@ async function main(n) {
 
   console.log("SAVING...");
   await fs.writeFile(
-    "./data/urls/urls3.json",
+    "./data/scraper/urls/urls3.json",
     JSON.stringify(urlJSON, null, 2)
   );
 
