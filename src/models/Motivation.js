@@ -9,7 +9,7 @@ class MotivationModel {
     return res;
   }
 
-  async getPost(ref = db.collection("motivation-post")) {
+  async getPost(ref = db.collection("motivation")) {
     let res = [];
     const snapShot = await ref.get();
 

@@ -1,0 +1,47 @@
+<ul class="dropdown-menu shadow">
+    <label class="mb-0 fw-bold px-2">Sort By</label>
+    <ul id="sortBy" class="list-group list-group-flush">
+        <li class="list-group-item">
+            <input class="form-check-input me-1" type="radio" name="sortBy" value="likes" id="byLike"
+                <% if (response.sortBy === "likes") { %> checked <% } %>>
+            <label class="form-check-label" for="byLike">Like</label>
+        </li>
+        <li class="list-group-item">
+            <input class="form-check-input me-1" type="radio" name="sortBy" id="byCmt" value="cmts"
+                <% if (response.sortBy === "cmts") { %> checked <% } %>>
+            <label class="form-check-label" for="byCmt">Comment</label>
+        </li>
+        <li class="list-group-item">
+            <input class="form-check-input me-1" type="radio" name="sortBy" id="byDate" value="dateTime"
+                <% if (response.sortBy === "dateTime") { %> checked <% } %>>
+            <label class="form-check-label" for="byDate">Date</label>
+        </li>
+    </ul>
+
+    <li>
+        <hr class="dropdown-divider">
+    </li>
+
+    <div class="d-flex align-items-center">
+        <label class="px-2 mb-0 me-auto fw-bold">Topics</label>
+        <button id="topics" class="btn border-0" type="submit">
+            <i class="fa-solid fa-magnifying-glass fa-sm"></i>
+        </button>
+    </div>
+    <div id="topicInputs" class="row mx-0" style="max-width: 300px;">
+        <% response.options.forEach(option => { %>
+        <div class="col-auto py-1 ps-2 pe-0">
+            <input type="checkbox" class="btn-check 
+            <% if (response.topics.includes(option)) { %> checked <% } %>" id="<%= option %>" value="<%= option %>"
+                autocomplete="off" <% if (response.topics.includes(option)) { %> checked <% } %>>
+            <label class="btn btn-outline-primary px-2 py-0 rounded-3" for="<%= option %>"><%= option %></label>
+        </div>
+        <% }) %>
+
+        <!-- <div class="col-auto px-1">
+            <input type="checkbox" class="btn-check" id="gym" autocomplete="off">
+            <label class="btn px-1 py-0" for="gym">Gym</label>
+        </div> -->
+
+    </div>
+</ul>

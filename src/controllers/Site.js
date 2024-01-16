@@ -1,6 +1,6 @@
 class SiteController {
   index(req, res) {
-    res.json("Yahallose~");
+    res.render("index");
   }
 
   notFound(req, res) {
@@ -22,7 +22,7 @@ class SiteController {
 
     const date = new Date().toLocaleString(locale, options);
 
-    res.json({ date, locale, options });
+    res.json({ date, locale });
   }
 }
 

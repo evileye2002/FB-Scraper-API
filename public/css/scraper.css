@@ -1,0 +1,43 @@
+.navbar-toggler {
+  border: var(--bs-border-width) solid rgb(var(--bs-light-rgb));
+  color: rgb(var(--bs-light-rgb));
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 var(--bs-navbar-toggler-focus-width)
+    rgb(var(--bs-light-rgb));
+}
+
+.navbar-toggler:hover {
+  background: rgb(var(--bs-light-rgb));
+  color: rgb(var(--bs-primary-rgb));
+}
+
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 140px;
+  max-height: 140px;
+}
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgb(var(--bs-primary-rgb));
+}
+
+.card {
+  transition: 0.4s ease;
+}
+
+.pagination {
+  margin-bottom: 0;
+}
