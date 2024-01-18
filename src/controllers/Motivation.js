@@ -34,6 +34,8 @@ class MotivationController {
 
       if (topics !== "all") {
         topics = topics.toLowerCase().split(",");
+        topics.pop();
+
         result = topics.reduce((filteredPosts, topic) => {
           return filteredPosts.filter((post) =>
             post.caption.toLowerCase().includes(topic)
@@ -99,7 +101,7 @@ class MotivationController {
         posts: result,
       };
 
-      console.log(options.length);
+      // console.log(options.length, topics);
       res.render("motivation", { response });
     } catch (error) {
       console.log(error);
