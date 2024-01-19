@@ -1,7 +1,7 @@
 const { default: puppeteer } = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 const fs = require("fs").promises;
-const { sleep } = require("./helper");
+const { sleep } = require("../helper");
 puppeteer.use(StealthPlugin());
 
 const url = `https://mbasic.facebook.com/hashtag/motivation`;
@@ -17,7 +17,7 @@ const main = async () => {
 
   console.log("DONE");
   await fs.writeFile(
-    "./data/cookies/cookies3.json",
+    "./data/scraper/cookies/cookies3.json",
     JSON.stringify(cookies, null, 2)
   );
   await browser.close();

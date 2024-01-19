@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Motivation Post</title>
+    <link rel="stylesheet" href="vendor/bootstrap-5.3.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="vendor/fontawesome-6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="css/scraper.css" />
+</head>
+
+<body>
+    <div class="container-fluid bg-primary-subtle">
+        <div class="container p-5">
+            <h2 id="postType" class="mb-0 fw-bold">#motivation</h2>
+            <span id="numPost" class="fw-bold text-black-50"><%= response.total %> posts</span>
+        </div>
+    </div>
+    <div class="container vh-100 mt-3">
+        <div class="h-100">
+            <div class="d-flex ms-3">
+                <!-- Filter -->
+                <div class="">
+                    <button
+                        class="btn btn-secondary rounded-4 bg-primary-subtle border-0 text-dark d-flex align-items-center"
+                        type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <i class="fa-solid fa-filter me-2"></i>
+                        Filter
+                    </button>
+                    <%- include('layouts/filter.ejs') %>
+                </div>
+
+                <!-- Search -->
+                <div class="d-flex justify-content-end w-100">
+                    <div class="d-flex rounded-4 bg-primary-subtle w-50 ">
+                        <form id="formSearch" class="d-flex w-100" role="search">
+                            <input id="searchImput"
+                                class="form-control rounded-4 bg-primary-subtle shadow-none border-0" type="search"
+                                placeholder="Search" aria-label="Search" list="datalistOptions" />
+                            <datalist id="datalistOptions">
+                                <option value="gym"></option>
+                                <option value="sport"></option>
+                            </datalist>
+
+                            <button id="btnSearch" class="btn border-0" type="submit">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+            <nav class="d-flex pt-2">
+                <%- include('layouts/pagination.ejs') %>
+            </nav>
+
+            <!-- Main -->
+            <div class="mx-0 ms-3 pb-3">
+
+                <% if (response.error) { %>
+                <h3 id="error-text" class="text-danger text-center mb-0 mt-3">
+                    Page Not Found
+                </h3>
+                <% } else { %>
+                <%- include('layouts/card-post.ejs') %>
+                <% } %>
+            </div>
+
+            <nav class="d-flex pb-3">
+                <% if (!response.error) { %>
+                <%- include('layouts/pagination.ejs') %>
+                <% } %>
+            </nav>
+        </div>
+
+        <script src="vendor/bootstrap-5.3.2/js/bootstrap.bundle.min.js"></script>
+        <script src="vendor/JQuery-3.7.1/jquery.min.js"></script>
+        <script type="module" src="js/scraper.js"></script>
+</body>
+
+</html>

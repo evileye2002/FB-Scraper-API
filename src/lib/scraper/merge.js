@@ -1,9 +1,9 @@
-const { removeDuplicate } = require("./helper");
+const { removeDuplicate } = require("../helper");
 const fs = require("fs").promises;
 
 async function main(file1, file2, fileOutput) {
-  const posts1String = await fs.readFile(`./data/${file1}.json`);
-  const posts2String = await fs.readFile(`./data/${file2}.json`);
+  const posts1String = await fs.readFile(`./data/scraper/${file1}.json`);
+  const posts2String = await fs.readFile(`./data/scraper/${file2}.json`);
 
   const posts1 = JSON.parse(posts1String);
   const posts2 = JSON.parse(posts2String);
@@ -17,7 +17,7 @@ async function main(file1, file2, fileOutput) {
 
   console.log("SAVING...");
   await fs.writeFile(
-    `./data/merge/${fileOutput}.json`,
+    `./data/scraper/merge/${fileOutput}.json`,
     JSON.stringify(final, null, 2)
   );
 }

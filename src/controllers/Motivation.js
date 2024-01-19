@@ -1,4 +1,5 @@
 const fs = require("fs").promises;
+const options = require("../lib/topicOptions");
 const motivationModel = require("../models/Motivation");
 
 class MotivationController {
@@ -15,64 +16,103 @@ class MotivationController {
     // return this.posts;
   }
 
-  async byPage(req, res) {
-    let { page } = req.params;
-    let postsPerPage = 30;
-    page = page ?? 1;
+  async index(req, res) {
+    let response = {};
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 12;
+      const topicLimit = parseInt(req.query.topicLimit) || 10;
+      // let topicOptions = options.slice(0, page * topicLimit);
+      let search = req.query.search || "";
+      let sort = req.query.sort || "desc";
+      let sortBy = req.query.sortBy || "likes";
+      let topics = req.query.topics || "all";
 
-    let maxPage = Math.floor(this.posts.length / postsPerPage);
-    if (maxPage * postsPerPage < this.posts.length) maxPage++;
+      let sortNumber = ["likes", "cmts"];
+      let sortOptions = ["desc", "asc"];
+      let result = this.posts;
 
-    if (page > 0 && page <= maxPage) {
-      const startPos = page * postsPerPage - postsPerPage;
-      let endPos = page * postsPerPage;
+      if (topics !== "all") {
+        topics = topics.toLowerCase().split(",");
+        topics.pop();
 
-      if (endPos > this.posts.length) endPos = this.posts.length;
+        result = topics.reduce((filteredPosts, topic) => {
+          return filteredPosts.filter((post) =>
+            post.caption.toLowerCase().includes(topic)
+          );
+        }, result);
+      }
 
-      const result = this.posts.slice(startPos, endPos);
-      res.json({
-        total: this.posts.length,
-        page: `${page}/${maxPage}`,
-        value: result,
-      });
-    } else {
-      res.json({
-        total: this.posts.length,
-        error: "out of page",
-      });
-    }
-  }
+      if (search !== "") {
+        search = search.toLowerCase();
+        result = result.filter((post) => {
+          return (
+            post.caption.toLowerCase().includes(search) ||
+            post.creatorName.toLowerCase().includes(search)
+          );
+        });
+      }
 
-  async bySearch(req, res) {
-    let { search, page } = req.params;
-    let postsPerPage = 30;
-    search = search ?? "";
-    page = page ?? 1;
+      if (sortOptions.includes(sort)) {
+        result = result.sort((a, b) => {
+          let value1 = a[sortBy];
+          let value2 = b[sortBy];
 
-    const similarItems = this.posts.filter((item) => {
-      return item.caption.includes(search) || item.creatorName.includes(search);
-    });
+          if (sortNumber.includes(sortBy)) {
+            value1 = Number(value1.replace(/\./g, ""));
+            value2 = Number(value2.replace(/\./g, ""));
+          }
 
-    let maxPage = Math.floor(similarItems.length / postsPerPage);
-    if (maxPage * postsPerPage < similarItems.length) maxPage++;
+          if (sortBy.includes("dateTime")) {
+            value1 = new Date(value1);
+            value2 = new Date(value2);
+          }
 
-    if (page > 0 && page <= maxPage) {
-      const startPos = page * postsPerPage - postsPerPage;
-      let endPos = page * postsPerPage;
+          return sort === "asc" ? value1 - value2 : value2 - value1;
+        });
+      }
 
-      if (endPos > similarItems.length) endPos = similarItems.length;
+      const total = result.length;
+      let maxPage = Math.floor(result.length / limit);
+      if (maxPage * limit < result.length) maxPage++;
+      if (page > maxPage) {
+        // res.status(500).json({ error: true, message: "Out of Range" });
 
-      const result = similarItems.slice(startPos, endPos);
-      res.json({
-        total: similarItems.length,
-        page: `${page}/${maxPage}`,
-        value: result,
-      });
-    } else {
-      res.json({
-        total: similarItems.length,
-        error: "out of page",
-      });
+        response = {
+          error: true,
+          message: "Out of Range",
+          topics,
+          options,
+        };
+        res.render("motivation", { response });
+        return;
+      }
+
+      result = result.slice(page * limit - limit, page * limit);
+
+      response = {
+        error: false,
+        total,
+        page,
+        sortBy,
+        maxPage,
+        topics,
+        options,
+        posts: result,
+      };
+
+      // console.log(options.length, topics);
+      res.render("motivation", { response });
+    } catch (error) {
+      console.log(error);
+      // res.status(500).json({ error: true, message: "Internal Server Error" });
+      response = {
+        error: true,
+        message: "Internal Server Error",
+        topics,
+        options,
+      };
+      res.render("motivation", { response });
     }
   }
 }

@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const routers = require("./routers");
+const routes = require("./routes");
 
 const app = express();
 const port = process.env.PORT || 4602;
@@ -9,14 +9,15 @@ const corsPolice = cors({
   optionsSuccessStatus: 200,
 });
 
+app.set("view engine", "ejs");
 app.use(
   corsPolice,
-  express.static("src/publci"),
   express.json(),
-  express.urlencoded({ extended: true })
+  express.urlencoded({ extended: true }),
+  express.static("public")
 );
 
-routers(app);
+routes(app);
 
 // Start
 app.listen(port, (error) => {

@@ -1,0 +1,21 @@
+<div id="posts-grid" class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+    <% response.posts.forEach(post => { %>
+    <div class="col">
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title mb-0"><%= post.creatorName %></h5>
+                <p class="text-black-50" style="font-size: smaller;"><%= post.dateTime %></p>
+                <p class="card-text"><%= post.caption %></p>
+                <div class="d-flex">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-regular fa-thumbs-up text-primary"></i>
+                        <p class="mb-0 ms-1 fw-bold"><%= post.likes %></p>
+                        <i class="fa-regular fa-comment text-primary ms-3"></i>
+                        <p class="mb-0 ms-1 fw-bold"><%= post.cmts %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>
