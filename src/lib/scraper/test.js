@@ -16,11 +16,10 @@ async function main(cookiesImput) {
       "C:/Users/Admin/AppData/Local/Google/Chrome for Testing/User Data",
   });
   const page = await browser.newPage();
-  await sleep(3000);
 
   if (cookies === null) {
     const cookiesString = await fs.readFile(
-      `./data/scraper/cookies/${cookiesImput}.json`
+      `./data/scraper/cookies/cookies-${cookiesImput}.json`
     );
     cookies = JSON.parse(cookiesString);
   }
@@ -29,4 +28,4 @@ async function main(cookiesImput) {
   await page.setUserAgent(rua.getRandom());
   await page.goto(url);
 }
-main("cookies1");
+main(2);

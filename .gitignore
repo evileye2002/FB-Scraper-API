@@ -3,5 +3,11 @@ package-lock.json
 node_modules
 
 
-data
+**/v1/*.json
+**/caches/*.json
+**/cookies/*.json
+**/merge/*.json
+**/urls/*.json
+**/scraper/*.json
+
 **/creds.json

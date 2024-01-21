@@ -1,6 +1,6 @@
 const fs = require("fs").promises;
 const options = require("../lib/topicOptions");
-const motivationModel = require("../models/Motivation");
+// const motivationModel = require("../models/Motivation");
 
 class MotivationController {
   constructor() {
