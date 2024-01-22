@@ -1,6 +1,5 @@
 const fs = require("fs").promises;
 const options = require("../lib/topicOptions");
-// const motivationModel = require("../models/Motivation");
 
 class MotivationController {
   constructor() {
@@ -18,17 +17,15 @@ class MotivationController {
 
   async index(req, res) {
     let response = {};
+    let topics = req.query.topics || "all";
+
     try {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12;
-      const topicLimit = parseInt(req.query.topicLimit) || 10;
-      // let topicOptions = options.slice(0, page * topicLimit);
       let search = req.query.search || "";
       let sort = req.query.sort || "desc";
       let sortBy = req.query.sortBy || "score";
-      let topics = req.query.topics || "all";
 
-      let sortNumber = ["likes", "cmts"];
       let sortOptions = ["desc", "asc"];
       let result = this.posts;
 
@@ -58,11 +55,6 @@ class MotivationController {
           let value1 = a[sortBy];
           let value2 = b[sortBy];
 
-          if (sortNumber.includes(sortBy)) {
-            value1 = Number(value1.replace(/\./g, ""));
-            value2 = Number(value2.replace(/\./g, ""));
-          }
-
           if (sortBy.includes("dateTime")) {
             value1 = new Date(value1);
             value2 = new Date(value2);
@@ -76,8 +68,6 @@ class MotivationController {
       let maxPage = Math.floor(result.length / limit);
       if (maxPage * limit < result.length) maxPage++;
       if (page > maxPage) {
-        // res.status(500).json({ error: true, message: "Out of Range" });
-
         response = {
           error: true,
           message: "Out of Range",
@@ -101,17 +91,16 @@ class MotivationController {
         posts: result,
       };
 
-      // console.log(options.length, topics);
       res.render("motivation", { response });
     } catch (error) {
       console.log(error);
-      // res.status(500).json({ error: true, message: "Internal Server Error" });
       response = {
         error: true,
         message: "Internal Server Error",
         topics,
         options,
       };
+
       res.render("motivation", { response });
     }
   }
