@@ -9,7 +9,7 @@ class MotivationController {
 
   async init() {
     const postsString = await fs.readFile(
-      "./data/motivation/v1/posts-new.json"
+      "./data/motivation/v2/posts-new.json"
     );
     this.posts = JSON.parse(postsString);
     // this.posts = await motivationModel.getPost();
@@ -25,7 +25,7 @@ class MotivationController {
       // let topicOptions = options.slice(0, page * topicLimit);
       let search = req.query.search || "";
       let sort = req.query.sort || "desc";
-      let sortBy = req.query.sortBy || "likes";
+      let sortBy = req.query.sortBy || "score";
       let topics = req.query.topics || "all";
 
       let sortNumber = ["likes", "cmts"];

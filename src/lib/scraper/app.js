@@ -65,17 +65,15 @@ async function main(urlsImput, cookiesImput, fileOutput) {
         // }
 
         let likeElement = post.querySelector("footer span a");
-        let likes = likeElement ? likeElement.innerText : 0;
-        likes = Number(likes.replace(/\./g, ""));
+        let likes = likeElement ? likeElement.innerText : "0";
 
         let footerElements = post.querySelectorAll("footer div a");
-        let cmts = 0;
+        let cmts = "0";
         let postUrl = null;
         if (footerElements) {
           footerElements.forEach((text) => {
             if (text.innerText.includes("bình luận")) {
               cmts = text.innerText.replace("bình luận", "").replace(" ", "");
-              cmts = Number(cmts.replace(/\./g, ""));
             }
 
             if (text.innerText.includes("Toàn bộ tin"))
@@ -83,6 +81,8 @@ async function main(urlsImput, cookiesImput, fileOutput) {
           });
         }
 
+        likes = Number(likes.replace(/\./g, ""));
+        cmts = Number(cmts.replace(/\./g, ""));
         let dateElement = post.querySelector("footer > div > abbr");
         let dateTime = dateElement ? dateElement.innerText : null;
 
@@ -199,8 +199,6 @@ async function main(urlsImput, cookiesImput, fileOutput) {
 async function mainAuto(n, cookiesImput, fileOutput) {
   const browser = await puppeteer.launch({
     headless: false,
-    // userDataDir:
-    //   "C:/Users/Admin/AppData/Local/Google/Chrome for Testing/User Data",
   });
   const page = await browser.newPage();
 
@@ -212,13 +210,16 @@ async function mainAuto(n, cookiesImput, fileOutput) {
   }
   await page.setCookie(...cookies);
   await page.goto(url);
-  await sleep(20000);
 
   let allPosts = [];
   while (allPosts.length <= n) {
-    if ((await page.$$("div article")).length == 0) {
+    if (
+      (await page.$$("div article")).length == 0 ||
+      !(await page.waitForSelector("#see_more_pager a"))
+    ) {
       console.log("RESET CURSOR");
       await page.goto(url);
+      return;
     }
 
     const nextPage = await page.waitForSelector("#see_more_pager a");
@@ -245,17 +246,15 @@ async function mainAuto(n, cookiesImput, fileOutput) {
         let caption = divs[0] ? divs[0].innerText : "";
 
         let likeElement = post.querySelector("footer span a");
-        let likes = likeElement ? likeElement.innerText : 0;
-        likes = Number(likes.replace(/\./g, ""));
+        let likes = likeElement ? likeElement.innerText : "0";
 
         let footerElements = post.querySelectorAll("footer div a");
-        let cmts = 0;
+        let cmts = "0";
         let postUrl = "";
         if (footerElements) {
           footerElements.forEach((text) => {
             if (text.innerText.includes("bình luận")) {
               cmts = text.innerText.replace("bình luận", "").replace(" ", "");
-              cmts = Number(cmts.replace(/\./g, ""));
             }
 
             if (text.innerText.includes("Toàn bộ tin"))
@@ -263,6 +262,8 @@ async function mainAuto(n, cookiesImput, fileOutput) {
           });
         }
 
+        likes = Number(likes.replace(/\./g, ""));
+        cmts = Number(cmts.replace(/\./g, ""));
         let dateElement = post.querySelector("footer > div > abbr");
         let dateTime = dateElement ? dateElement.innerText : null;
 
@@ -306,6 +307,29 @@ async function mainAuto(n, cookiesImput, fileOutput) {
             break;
           default:
             score = 0;
+        }
+
+        switch (true) {
+          case cmts >= 1000000:
+            score += 3;
+            break;
+          case cmts >= 100000:
+            score += 2.5;
+            break;
+          case cmts >= 10000:
+            score += 2;
+            break;
+          case cmts >= 1000:
+            score += 1.5;
+            break;
+          case cmts >= 100:
+            score += 1;
+            break;
+          case cmts > 0:
+            score += 0.5;
+            break;
+          default:
+            score += 0;
         }
 
         switch (true) {
@@ -375,4 +399,4 @@ async function mainAuto(n, cookiesImput, fileOutput) {
 }
 
 // main("urls2", "cookies1", "posts-20");
-mainAuto(500, 4, 30);
+mainAuto(500, 5, 35);

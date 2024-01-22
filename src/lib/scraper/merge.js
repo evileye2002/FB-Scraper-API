@@ -56,6 +56,29 @@ async function rating(input, output) {
     }
 
     switch (true) {
+      case cmts >= 1000000:
+        score += 3;
+        break;
+      case cmts >= 100000:
+        score += 2.5;
+        break;
+      case cmts >= 10000:
+        score += 2;
+        break;
+      case cmts >= 1000:
+        score += 1.5;
+        break;
+      case cmts >= 100:
+        score += 1;
+        break;
+      case cmts > 0:
+        score += 0.5;
+        break;
+      default:
+        score += 0;
+    }
+
+    switch (true) {
       case rate >= 1:
         score += 2.5;
         break;
@@ -94,7 +117,7 @@ async function rating(input, output) {
   );
 }
 
-// rating("posts-14", "posts-14");
+// rating("merge/posts-35-m", "posts-35-ms");
 
 async function mergeMultiple(files, fileOutput) {
   const promises = files.map(async (file) => {
@@ -124,4 +147,4 @@ async function mergeMultiple(files, fileOutput) {
   console.log("DONE");
 }
 
-mergeMultiple(["merge/posts-22-m", "posts-25", "posts-26"], 26);
+mergeMultiple(["merge/posts-35-ms"], 35);
