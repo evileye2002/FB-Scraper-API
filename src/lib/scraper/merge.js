@@ -124,4 +124,4 @@ async function mergeMultiple(files, fileOutput) {
   console.log("DONE");
 }
 
-mergeMultiple(["merge/posts-21-m", "posts-24"], 22);
+mergeMultiple(["merge/posts-22-m", "posts-25", "posts-26"], 26);

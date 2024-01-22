@@ -11,13 +11,13 @@ const main = async () => {
   const page = await browser.newPage();
   await page.goto(url);
 
-  await sleep(3000000);
+  await sleep(30000);
 
   const cookies = await page.cookies();
 
   console.log("DONE");
   await fs.writeFile(
-    "./data/scraper/cookies/cookies3.json",
+    "./data/scraper/cookies/cookies-5.json",
     JSON.stringify(cookies, null, 2)
   );
   await browser.close();

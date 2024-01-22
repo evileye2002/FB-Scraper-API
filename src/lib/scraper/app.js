@@ -199,8 +199,8 @@ async function main(urlsImput, cookiesImput, fileOutput) {
 async function mainAuto(n, cookiesImput, fileOutput) {
   const browser = await puppeteer.launch({
     headless: false,
-    userDataDir:
-      "C:/Users/Admin/AppData/Local/Google/Chrome for Testing/User Data",
+    // userDataDir:
+    //   "C:/Users/Admin/AppData/Local/Google/Chrome for Testing/User Data",
   });
   const page = await browser.newPage();
 
@@ -215,9 +215,13 @@ async function mainAuto(n, cookiesImput, fileOutput) {
   await sleep(20000);
 
   let allPosts = [];
-  while (allPosts.length <= n && (await page.$("#see_more_pager"))) {
-    const nextPage = await page.waitForSelector("#see_more_pager a");
+  while (allPosts.length <= n) {
+    if ((await page.$$("div article")).length == 0) {
+      console.log("RESET CURSOR");
+      await page.goto(url);
+    }
 
+    const nextPage = await page.waitForSelector("#see_more_pager a");
     const postsCurrentPage = await page.evaluate(() => {
       const posts = document.querySelectorAll("div article");
 
@@ -356,10 +360,14 @@ async function mainAuto(n, cookiesImput, fileOutput) {
     await sleep(3000);
   }
 
+  console.log("REMOVING DUP...");
+  const final = removeDup(allPosts);
+  console.log(`REMOVED ${allPosts.length - final.length} POSTS`);
+
   console.log("SAVING...");
   await fs.writeFile(
     `./data/scraper/posts-${fileOutput}.json`,
-    JSON.stringify(allPosts, null, 2)
+    JSON.stringify(final, null, 2)
   );
 
   console.log("DONE");
@@ -367,4 +375,4 @@ async function mainAuto(n, cookiesImput, fileOutput) {
 }
 
 // main("urls2", "cookies1", "posts-20");
-mainAuto(500, 2, 26);
+mainAuto(500, 4, 30);
