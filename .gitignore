@@ -2,6 +2,9 @@
 package-lock.json
 node_modules
 
+# Data
+**/motivation/**/*.json
+**/scraper/**/*.json
 
-data
+
 **/creds.json

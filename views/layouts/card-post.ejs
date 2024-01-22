@@ -3,7 +3,14 @@
     <div class="col">
         <div class="card mt-4">
             <div class="card-body">
-                <h5 class="card-title mb-0"><%= post.creatorName %></h5>
+                <div class="d-flex">
+                    <h5 class="card-title mb-0"><%= post.creatorName %></h5>
+                    <h6 class="mb-0 ms-auto">
+                        <span class="badge rounded-pill bg-primary" style="min-width: 30px;">
+                            <%= post.score %>
+                        </span>
+                    </h6>
+                </div>
                 <p class="text-black-50" style="font-size: smaller;"><%= post.dateTime %></p>
                 <p class="card-text"><%= post.caption %></p>
                 <div class="d-flex">
@@ -12,6 +19,11 @@
                         <p class="mb-0 ms-1 fw-bold"><%= post.likes %></p>
                         <i class="fa-regular fa-comment text-primary ms-3"></i>
                         <p class="mb-0 ms-1 fw-bold"><%= post.cmts %></p>
+                    </div>
+                    <div class="ms-auto">
+                        <a target="_blank" href="https://www.facebook.com/story.php?story_fbid=<%= post.id %>">
+                            <i class="fa-solid fa-up-right-from-square"></i>
+                        </a>
                     </div>
                 </div>
             </div>

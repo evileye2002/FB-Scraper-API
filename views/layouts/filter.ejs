@@ -2,6 +2,11 @@
     <label class="mb-0 fw-bold px-2">Sort By</label>
     <ul id="sortBy" class="list-group list-group-flush">
         <li class="list-group-item">
+            <input class="form-check-input me-1" type="radio" name="sortBy" id="byScore" value="score"
+                <% if (response.sortBy === "score") { %> checked <% } %>>
+            <label class="form-check-label" for="byScore">Score</label>
+        </li>
+        <li class="list-group-item">
             <input class="form-check-input me-1" type="radio" name="sortBy" value="likes" id="byLike"
                 <% if (response.sortBy === "likes") { %> checked <% } %>>
             <label class="form-check-label" for="byLike">Like</label>
