@@ -214,18 +214,6 @@ async function mainAuto(n, cookiesImput, fileOutput) {
   await page.goto(url);
   await sleep(3000);
 
-  const keys = [
-    "health",
-    "success",
-    "mind",
-    "inspiration",
-    "body",
-    "love",
-    "challenge",
-    "fitness",
-    "quote",
-    "workout",
-  ];
   let allPosts = [];
 
   try {
@@ -241,6 +229,18 @@ async function mainAuto(n, cookiesImput, fileOutput) {
 
       const nextPage = await page.waitForSelector("#see_more_pager a");
       const postsCurrentPage = await page.evaluate(() => {
+        const keys = [
+          "health",
+          "success",
+          "mind",
+          "inspiration",
+          "body",
+          "love",
+          "challenge",
+          "fitness",
+          "quote",
+          "workout",
+        ];
         const posts = document.querySelectorAll("div article");
 
         return Array.from(posts).map((post) => {
