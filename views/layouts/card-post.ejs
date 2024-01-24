@@ -16,9 +16,13 @@
                 <div class="d-flex">
                     <div class="d-flex align-items-center">
                         <i class="fa-regular fa-thumbs-up text-primary"></i>
-                        <p class="mb-0 ms-1 fw-bold"><%= post.likes %></p>
+                        <p class="mb-0 ms-1 fw-bold">
+                            <%= post.likes.toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+                        </p>
                         <i class="fa-regular fa-comment text-primary ms-3"></i>
-                        <p class="mb-0 ms-1 fw-bold"><%= post.cmts %></p>
+                        <p class="mb-0 ms-1 fw-bold">
+                            <%= post.cmts.toLocaleString('vi-VN', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) %>
+                        </p>
                     </div>
                     <div class="ms-auto">
                         <a target="_blank" href="https://www.facebook.com/story.php?story_fbid=<%= post.id %>">

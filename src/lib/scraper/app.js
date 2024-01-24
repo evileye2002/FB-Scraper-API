@@ -212,178 +212,181 @@ async function mainAuto(n, cookiesImput, fileOutput) {
   }
   await page.setCookie(...cookies);
   await page.goto(url);
+  await sleep(3000);
 
+  const keys = [
+    "health",
+    "success",
+    "mind",
+    "inspiration",
+    "body",
+    "love",
+    "challenge",
+    "fitness",
+    "quote",
+    "workout",
+  ];
   let allPosts = [];
-  while (allPosts.length <= n) {
-    if (
-      (await page.$$("div article")).length == 0 ||
-      !(await page.waitForSelector("#see_more_pager a"))
-    ) {
-      console.log("RESET CURSOR");
-      await page.goto(url);
-      return;
-    }
 
-    const nextPage = await page.waitForSelector("#see_more_pager a");
-    const postsCurrentPage = await page.evaluate(() => {
-      const posts = document.querySelectorAll("div article");
+  try {
+    while (allPosts.length <= n) {
+      if (
+        (await page.$$("div article")).length == 0 ||
+        !(await page.waitForSelector("#see_more_pager a"))
+      ) {
+        console.log("RESET CURSOR");
+        await page.goto(url);
+        await sleep(3000);
+      }
 
-      return Array.from(posts).map((post) => {
-        let creator = post.querySelector("header h3 a");
-        let creatorName = "";
-        let creatorID = "";
-        if (creator) {
-          creatorName = creator.innerText;
-          creatorID = creator.href
-            .split("eav=")[0]
-            .split("facebook.com/")[1]
-            .replace(/\?/g, "")
-            .replace(/&/g, "");
+      const nextPage = await page.waitForSelector("#see_more_pager a");
+      const postsCurrentPage = await page.evaluate(() => {
+        const posts = document.querySelectorAll("div article");
 
-          if (creatorID.includes("__xts__"))
-            creatorID = creatorID.split("__xts__")[0];
-        }
+        return Array.from(posts).map((post) => {
+          let creator = post.querySelector("header h3 a");
+          let creatorName = "";
+          let creatorID = "";
+          if (creator) {
+            creatorName = creator.innerText;
+            creatorID = creator.href
+              .split("eav=")[0]
+              .split("facebook.com/")[1]
+              .replace(/\?/g, "")
+              .replace(/&/g, "");
 
-        let divs = post.querySelectorAll("div[data-ft]");
-        let caption = divs[0] ? divs[0].innerText : "";
-
-        let likeElement = post.querySelector("footer span a");
-        let likes = likeElement ? likeElement.innerText : "0";
-
-        let footerElements = post.querySelectorAll("footer div a");
-        let cmts = "0";
-        let postUrl = "";
-        if (footerElements) {
-          footerElements.forEach((text) => {
-            if (text.innerText.includes("bình luận")) {
-              cmts = text.innerText.replace("bình luận", "").replace(" ", "");
-            }
-
-            if (text.innerText.includes("Toàn bộ tin"))
-              postUrl = text.href.split("eav=")[0];
-          });
-        }
-
-        likes = Number(likes.replace(/\./g, ""));
-        cmts = Number(cmts.replace(/\./g, ""));
-        let dateElement = post.querySelector("footer > div > abbr");
-        let dateTime = dateElement ? dateElement.innerText : null;
-
-        const id = postUrl.split("story_fbid=")[1];
-
-        //Rating
-        let score = 0;
-        const rate = cmts / likes;
-
-        const keys = [
-          "health",
-          "success",
-          "mind",
-          "inspiration",
-          "body",
-          "love",
-          "challenge",
-          "fitness",
-          "quote",
-          "workout",
-        ];
-
-        switch (true) {
-          case likes >= 1000000:
-            score = 3;
-            break;
-          case likes >= 100000:
-            score = 2.5;
-            break;
-          case likes >= 10000:
-            score = 2;
-            break;
-          case likes >= 1000:
-            score = 1.5;
-            break;
-          case likes >= 100:
-            score = 1;
-            break;
-          case likes > 0:
-            score = 0.5;
-            break;
-          default:
-            score = 0;
-        }
-
-        switch (true) {
-          case cmts >= 1000000:
-            score += 3;
-            break;
-          case cmts >= 100000:
-            score += 2.5;
-            break;
-          case cmts >= 10000:
-            score += 2;
-            break;
-          case cmts >= 1000:
-            score += 1.5;
-            break;
-          case cmts >= 100:
-            score += 1;
-            break;
-          case cmts > 0:
-            score += 0.5;
-            break;
-          default:
-            score += 0;
-        }
-
-        switch (true) {
-          case rate >= 1:
-            score += 2.5;
-            break;
-          case rate >= 0.75:
-            score += 2;
-            break;
-          case rate >= 0.5:
-            score += 1.5;
-            break;
-          case rate >= 0.25:
-            score += 1;
-            break;
-          case rate > 0:
-            score += 0.5;
-            break;
-          default:
-            score += 0;
-        }
-
-        keys.forEach((key) => {
-          if (caption.includes(key)) {
-            score += 0.5;
+            if (creatorID.includes("__xts__"))
+              creatorID = creatorID.split("__xts__")[0];
           }
+
+          let divs = post.querySelectorAll("div[data-ft]");
+          let caption = divs[0] ? divs[0].innerText : "";
+
+          let likeElement = post.querySelector("footer span a");
+          let likes = likeElement ? likeElement.innerText : "0";
+
+          let footerElements = post.querySelectorAll("footer div a");
+          let cmts = "0";
+          let postUrl = "";
+          if (footerElements) {
+            footerElements.forEach((text) => {
+              if (text.innerText.includes("bình luận")) {
+                cmts = text.innerText.replace("bình luận", "").replace(" ", "");
+              }
+
+              if (text.innerText.includes("Toàn bộ tin"))
+                postUrl = text.href.split("eav=")[0];
+            });
+          }
+
+          likes = Number(likes.replace(/\./g, ""));
+          cmts = Number(cmts.replace(/\./g, ""));
+          let dateElement = post.querySelector("footer > div > abbr");
+          let dateTime = dateElement ? dateElement.innerText : "";
+          let id = postUrl.split("story_fbid=")[1];
+
+          //Rating
+          let score = 0;
+          const rate = cmts / likes;
+
+          switch (true) {
+            case likes >= 1000000:
+              score = 10;
+              break;
+            case likes >= 100000:
+              score = 8;
+              break;
+            case likes >= 10000:
+              score = 6;
+              break;
+            case likes >= 1000:
+              score = 4;
+              break;
+            case likes >= 100:
+              score = 2;
+              break;
+            case likes > 0:
+              score = 1;
+              break;
+            default:
+              score = 0;
+          }
+
+          switch (true) {
+            case cmts >= 1000000:
+              score += 10;
+              break;
+            case cmts >= 100000:
+              score += 8;
+              break;
+            case cmts >= 10000:
+              score += 6;
+              break;
+            case cmts >= 1000:
+              score += 4;
+              break;
+            case cmts >= 100:
+              score += 2;
+              break;
+            case cmts > 0:
+              score += 1;
+              break;
+            default:
+              score += 0;
+          }
+
+          switch (true) {
+            case rate >= 1:
+              score += 5;
+              break;
+            case rate >= 0.75:
+              score += 4;
+              break;
+            case rate >= 0.5:
+              score += 3;
+              break;
+            case rate >= 0.25:
+              score += 2;
+              break;
+            case rate > 0:
+              score += 1;
+              break;
+            default:
+              score += 0;
+          }
+
+          keys.forEach((key) => {
+            if (caption.includes(key)) score += 1;
+          });
+
+          return {
+            id,
+            creatorID,
+            creatorName,
+            caption,
+            likes,
+            cmts,
+            dateTime,
+            score,
+          };
         });
-
-        return {
-          id,
-          creatorID,
-          creatorName,
-          caption,
-          likes,
-          cmts,
-          dateTime,
-          score,
-        };
       });
-    });
 
-    if (postsCurrentPage.length > 0) {
-      postsCurrentPage.forEach((post) => {
-        if (post.dateTime) post.dateTime = convertToDate(post.dateTime);
-        allPosts.push(post);
-      });
-      console.log(`Total: ${allPosts.length}`);
+      if (postsCurrentPage.length > 0) {
+        postsCurrentPage.forEach((post) => {
+          if (post.dateTime) post.dateTime = convertToDate(post.dateTime);
+
+          allPosts.push(post);
+        });
+        console.log(`Total: ${allPosts.length}`);
+      }
+
+      await nextPage.click();
+      await page.waitForNavigation({ waitUntil: "load" });
+      await sleep(3000);
     }
-
-    await nextPage.click();
-    await page.waitForNavigation({ waitUntil: "load" });
-    await sleep(3000);
+  } catch (error) {
+    console.log(error);
   }
 
   console.log("REMOVING DUP...");
@@ -400,4 +403,4 @@ async function mainAuto(n, cookiesImput, fileOutput) {
   await browser.close();
 }
 
-mainAuto(500, 5, 35);
+mainAuto(500, 4, 46);

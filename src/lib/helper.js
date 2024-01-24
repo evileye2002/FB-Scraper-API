@@ -26,12 +26,14 @@ function convertToDate(dateString) {
 
 function removeDup(array) {
   let res = null;
+  array.sort((a, b) => b.likes - a.likes);
+
   res = array.filter((item1, index) => {
     return (
       index ===
       array.findIndex((item2) => {
         return (
-          item1.creatorName === item2.creatorName &&
+          item1.creatorID === item2.creatorID &&
           item1.dateTime === item2.dateTime
         );
       })
