@@ -125,7 +125,7 @@ async function rating(input, output) {
   );
 }
 
-rating("merge/posts-65-m", "posts-65-ms");
+// rating("merge/posts-65-m", "posts-65-ms");
 
 async function mergeMultiple(files, fileOutput) {
   const promises = files.map(async (file) => {
