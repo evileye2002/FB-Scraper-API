@@ -2,9 +2,9 @@
   "name": "fb-scraper-api",
   "version": "0.1.1",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "app": "node src/app.js",
+    "scraper": "node src/lib/scraper/app.js",
     "dev": "nodemon src/app.js"
   },
   "keywords": [],
