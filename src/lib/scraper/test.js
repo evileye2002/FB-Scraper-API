@@ -31,7 +31,7 @@ async function main(cookiesImput) {
 // main(2);
 
 async function test() {
-  const postsString = await fs.readFile(`./data/scraper/merge/posts-45-m.json`);
+  const postsString = await fs.readFile(`./data/scraper/merge/posts-75-m.json`);
   const posts = JSON.parse(postsString);
 
   const keys = [
@@ -128,9 +128,15 @@ async function test() {
   });
 
   await fs.writeFile(
-    `./data/scraper/merge/posts-45-mr.json`,
+    `./data/scraper/merge/posts-75-mr.json`,
     JSON.stringify(posts, null, 2)
   );
 }
+
+// async function test() {
+//   for (let index = 1; index < 77; index++) {
+//     console.log(`'caches/posts-(${index})',`);
+//   }
+// }
 
 test();

@@ -130,6 +130,7 @@ async function mergeMultiple(files, fileOutput) {
     const mergedResult = [].concat(...results);
 
     if (mergedResult.length > 0) {
+      console.log("TOTAL", mergedResult.length);
       console.log("REMOVING DUP...");
       const final = removeDup(mergedResult);
       console.log(`REMOVED ${mergedResult.length - final.length} POSTS`);
@@ -147,19 +148,4 @@ async function mergeMultiple(files, fileOutput) {
   console.log("DONE");
 }
 
-mergeMultiple(
-  [
-    "merge/posts-45-mr",
-    "posts-36",
-    "posts-37",
-    "posts-38",
-    "posts-39",
-    "posts-40",
-    "posts-41",
-    "posts-42",
-    "posts-43",
-    "posts-44",
-    "posts-45",
-  ],
-  45
-);
+mergeMultiple(["merge/posts-76-m"], 77);
